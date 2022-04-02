@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+//返回值类型
 @Data
 public class R {
     @ApiModelProperty(value = "是否成功")
