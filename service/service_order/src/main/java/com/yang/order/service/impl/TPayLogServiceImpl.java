@@ -69,9 +69,9 @@ public class TPayLogServiceImpl extends ServiceImpl<TPayLogMapper, TPayLog> impl
             //System.out.println("第三方的数据resultMap---------------------"+resultMap);
             //4、封装返回结果集
             Map map = new HashMap<>();
-            map.put("out_trade_no", orderNo);
-            map.put("course_id", order.getCourseId());
-            map.put("total_fee", order.getTotalFee());
+            map.put("out_trade_no", orderNo);//订单号
+            map.put("course_id", order.getCourseId());//课程ID
+            map.put("total_fee", order.getTotalFee());//课程价格
             map.put("result_code", resultMap.get("result_code"));  //状态码
             map.put("code_url", resultMap.get("code_url"));      //二维码地址
 

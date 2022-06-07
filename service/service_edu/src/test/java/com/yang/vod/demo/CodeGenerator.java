@@ -22,7 +22,7 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         System.out.println(projectPath);
-        gc.setOutputDir("D:\\JAVAEE\\guli_parent\\service\\service_order" + "/src/main/java");
+        gc.setOutputDir("D:\\JAVAEE\\guli_parent\\service\\service_edu" + "/src/main/java");
         gc.setAuthor("YangYoung");
         gc.setOpen(false); //生成后是否打开资源管理器
         gc.setFileOverride(false); //重新生成时文件是否覆盖
@@ -48,7 +48,7 @@ public class CodeGenerator {
 
         // 4、包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("order"); //模块名
+        pc.setModuleName("serviceedu"); //模块名
         pc.setParent("com.yang");
         pc.setController("controller");
         pc.setEntity("entity");
@@ -59,7 +59,7 @@ public class CodeGenerator {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 //        strategy.setInclude("edu_chapter", "edu_course", "edu_course_description", "edu_video");
-        strategy.setInclude("t_order","t_pay_log");
+        strategy.setInclude("message");
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
         strategy.setTablePrefix(pc.getModuleName() + "_"); //生成实体时去掉表前缀
 

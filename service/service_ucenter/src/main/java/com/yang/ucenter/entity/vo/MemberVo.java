@@ -28,4 +28,6 @@ public class MemberVo {
 
         @ApiModelProperty(value = "用户头像")
         private String avatar;
+
+        private String password;
 }

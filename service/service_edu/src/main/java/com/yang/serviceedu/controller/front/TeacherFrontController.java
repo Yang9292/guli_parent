@@ -49,4 +49,24 @@ public class TeacherFrontController {
 
         return R.ok().data("teacher",teacher).data("courseList",courseList);
     }
+
+    //小程序根据分类查询讲师信息
+    @GetMapping("minigetTeacherInfo/{sort}")
+    public R minigetTeacherInfo(@PathVariable String sort){
+        QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
+        wrapper.eq("sort",sort);
+        List<EduTeacher> list = eduTeacherService.list(wrapper);
+        return R.ok().data("teacher",list);
+
+    }
+
+    //小程序 根据名称搜索讲师
+    @PostMapping("searchTeacher")
+    public R searchTeacher(@RequestParam String name){
+        QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
+        wrapper.like("name",name);
+        List<EduTeacher> list = eduTeacherService.list(wrapper);
+        return R.ok().data("list",list);
+    }
+
 }

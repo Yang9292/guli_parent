@@ -1,19 +1,22 @@
-package com.yang.serviceedu;
+package com.yang.servicestatis;
 
-import com.yang.commonutils.MD5;
+
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-//启动类
 @SpringBootApplication
-@EnableDiscoveryClient  //启动Nacos服务注册
-@EnableFeignClients  //服务调用
 @ComponentScan(basePackages = {"com.yang"})
-public class EduApplication {
+@EnableDiscoveryClient//服务注册
+@EnableFeignClients//服务调用
+@MapperScan("com.yang.servicestatis.mapper")
+@EnableScheduling //开启定时任务
+public class StaApplication {
     public static void main(String[] args) {
-        SpringApplication.run(EduApplication.class,args);
+        SpringApplication.run(StaApplication.class,args);
     }
 }

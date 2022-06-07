@@ -2,6 +2,7 @@ package com.yang.ucenter.mapper;
 
 import com.yang.ucenter.entity.Member;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MemberMapper extends BaseMapper<Member> {
 
+    //后台 查询一天注册的人数
+    Integer countRegister(@Param("day") String day);
 }

@@ -38,9 +38,9 @@ public class EduSubjectController {
 
     //获取全部课程列表
     @GetMapping("getAllSubject")
-    public R getAllSubject(){
+    public R getAllSubject() {
         List<OneSubject> list = eduSubjectService.getAllSubject();
-        return R.ok().data("list",list);
+        return R.ok().data("list", list);
     }
 
 }

@@ -16,7 +16,6 @@ public class OssServiceImpl implements OssService {
     @Override
     public String uploadFileAvator(MultipartFile file) {
 
-        // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
         String endpoint = ConstantPropertiesUtils.END_POINT;
         String accessKeyId = ConstantPropertiesUtils.KEY_ID;
         String accessKeySecret = ConstantPropertiesUtils.KEY_SECRET;
@@ -29,24 +28,19 @@ public class OssServiceImpl implements OssService {
             InputStream inputStream = file.getInputStream();
             //获得文件上传名称
             String originalFilename = file.getOriginalFilename();
-
             //解决重名文件会覆盖问题
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             originalFilename = uuid+originalFilename;
-
             //按照日期对文件进行分类
             String dateTime = new DateTime().toString("yyyy/MM/dd");
             originalFilename = dateTime +"/" + originalFilename;
-
             // 创建PutObject请求。
             //第一个参数 BUCKET_NAME的值
             //第二个参数 上传到oss中的文件路径和文件名
             //第三个参数 输入流
             ossClient.putObject(bucketName, originalFilename, inputStream);
-
             //关闭ossClient
             ossClient.shutdown();
-
             //获取文件url
             //https://edu-9292.oss-cn-beijing.aliyuncs.com/cc.jpg
             String url = "https://"+bucketName+"."+endpoint+"/"+originalFilename;

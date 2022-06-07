@@ -10,6 +10,7 @@ import com.yang.serviceedu.client.UcenterClient;
 import com.yang.serviceedu.entity.EduComment;
 import com.yang.serviceedu.entity.vo.MemberVo;
 import com.yang.serviceedu.service.EduCommentService;
+import com.yang.serviceedu.service.EduTeacherService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -36,6 +37,8 @@ public class EduCommentController {
 
     @Autowired
     private UcenterClient ucenterClient;
+
+
 
     //根据课程ID查询评论列表带分页
     @GetMapping("getComment/{nowPage}/{limit}")
@@ -79,6 +82,31 @@ public class EduCommentController {
         eduCommentService.save(eduComment);
         return R.ok();
     }
+
+    //小程序  根据讲师ID查询评论信息
+    @GetMapping("getTeacherComment/{teacherid}")
+    public R getTeacherComment(@PathVariable String teacherid){
+        QueryWrapper<EduComment> wrapper = new QueryWrapper<>();
+        wrapper.eq("teacher_id",teacherid);
+        List<EduComment> list = eduCommentService.list(wrapper);
+        return R.ok().data("list",list);
+    }
+
+    //小程序  添加评论
+    @PostMapping("saveMiniComment")
+    public R saveMiniComment(@RequestParam String teacherid,@RequestParam String userid,@RequestParam String content){
+
+        //根据用户ID查找用户信息
+        MemberVo memberVo = ucenterClient.miniUserInfo(userid);
+        EduComment comment = new EduComment();
+        comment.setAvatar(memberVo.getAvatar());
+        comment.setNickname(memberVo.getNickname());
+        comment.setTeacherId(teacherid);
+        comment.setContent(content);
+        eduCommentService.save(comment);
+        return R.ok();
+    }
+
 
 }
 

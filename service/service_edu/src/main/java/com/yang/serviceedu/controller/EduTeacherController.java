@@ -3,6 +3,7 @@ package com.yang.serviceedu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yang.commonutils.MD5;
 import com.yang.commonutils.R;
 import com.yang.servicebase.exceptionhandler.GuliException;
 import com.yang.serviceedu.entity.EduTeacher;
@@ -36,7 +37,7 @@ public class EduTeacherController {
     private EduTeacherService eduTeacherService;
 
     //查询全部讲师信息
-    @ApiOperation("查询所有讲师")
+    @ApiOperation("查询所有医师")
     @GetMapping("findAll")     //rest风格，GET表示查询
     public R findAll(){
         List<EduTeacher> list = eduTeacherService.list(null);
@@ -44,7 +45,7 @@ public class EduTeacherController {
     }
 
     //删除讲师信息
-    @ApiOperation("逻辑删除讲师")
+    @ApiOperation("逻辑删除医师")
     @DeleteMapping("{id}")
     public R deleteTeacherById(
             @ApiParam(name = "id",value = "讲师ID",required = true)
@@ -59,7 +60,7 @@ public class EduTeacherController {
     }
 
     //分页查询讲师信息
-    @ApiOperation("分页查询讲师信息")
+    @ApiOperation("分页查询医师信息")
     @GetMapping("pageTeacher/{nowpage}/{limit}")
     public R pageTeacher(
             @ApiParam(name = "nowpage",value = "当前页",required = true)
@@ -73,7 +74,7 @@ public class EduTeacherController {
         eduTeacherService.page(page,null);
         //获取信息的总行数
         long total = page.getTotal();
-        //获取分页后讲师信息
+        //获取分页后医师信息
         List<EduTeacher> records = page.getRecords();
 
         return R.ok().data("totals",total).data("rows",records);
@@ -127,6 +128,7 @@ public class EduTeacherController {
     @PostMapping("addTeacher")
     public R addTeacher(@RequestBody EduTeacher eduTeacher){
 
+
         boolean save = eduTeacherService.save(eduTeacher);
 
         if (save){
@@ -156,6 +158,83 @@ public class EduTeacherController {
         }
     }
 
+    //小程序   医师注册
+    @GetMapping("registDoctor")
+    public R registDoctor(@RequestParam  String url,@RequestParam String name,@RequestParam String phone,
+                          @RequestParam String password){
+        EduTeacher doctor = new EduTeacher();
+        doctor.setMobile("P"+phone);
+        doctor.setName(name);
+        doctor.setQualification(url);
+        doctor.setPassword(MD5.encrypt(password));
+        doctor.setAvatar("https://edu-9292.oss-cn-beijing.aliyuncs.com/2022/03/21/src%3Dhttp___ci.xiaohongshu.com_f9ca4f82-ce23-42b9-46fa-079a8287652b_imageView2_2_w_1080_format_jpg%26refer%3Dhttp___ci.xiaohongshu.webp");
+        eduTeacherService.save(doctor);
+        return R.ok();
+    }
 
+    // 小程序 医生登录
+    @PostMapping("doctorLogin")
+    public R doctorLogin(@RequestParam String mobile, @RequestParam String password){
+        QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
+        wrapper.eq("mobile",mobile);
+        EduTeacher doctor = eduTeacherService.getOne(wrapper);
+        if (StringUtils.isEmpty(doctor)){
+            throw new GuliException(20001,"账号不存在");
+        }
+        if (!doctor.getPassword().equals(MD5.encrypt(password))){
+            throw new GuliException(20001,"密码错误");
+        }
+        if (doctor.getIsPass() == 0){
+            throw new GuliException(20001,"账号待审核");
+        }
+        return R.ok().data("doctor",doctor);
+
+    }
+
+    //后台  获取全部医生注册信息
+    @GetMapping("getAllDoctor")
+    public R getAllDoctor(){
+        QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("gmt_create");
+        List<EduTeacher> list = eduTeacherService.list(wrapper);
+        return R.ok().data("list",list);
+    }
+
+    //后台  同意审核通过
+    @GetMapping("passDoctor/{id}")
+    public R passDoctor(@PathVariable String id){
+        EduTeacher doctor = eduTeacherService.getById(id);
+        if (StringUtils.isEmpty(doctor)){
+            throw new GuliException(20001,"账号数据为空");
+        }
+        doctor.setIsPass(1);
+        boolean result = eduTeacherService.saveOrUpdate(doctor);
+        if (!result){
+            throw new GuliException(20001,"审核失败");
+        }
+        return R.ok();
+    }
+
+    //后台  禁用用户
+    @GetMapping("deleteDoctor/{id}")
+    public R deleteDoctor(@PathVariable String id){
+        EduTeacher doctor = eduTeacherService.getById(id);
+        if (StringUtils.isEmpty(doctor)){
+            throw new GuliException(20001,"账号数据为空");
+        }
+        doctor.setIsPass(0);
+        boolean result = eduTeacherService.saveOrUpdate(doctor);
+        if (!result){
+            throw new GuliException(20001,"审核失败");
+        }
+        return R.ok();
+    }
+
+    //根据ID获取医生用户信息
+    @GetMapping("getDoctorInfo/{id}")
+    public R getDoctorInfo(@PathVariable String id){
+        EduTeacher doctor = eduTeacherService.getById(id);
+        return R.ok().data("doctor",doctor);
+    }
 }
 

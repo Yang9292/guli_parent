@@ -19,4 +19,10 @@ public interface MemberService extends IService<Member> {
 
     //注册
     void register(RegisterVo registerVo);
+
+    //小程序端  注册功能
+    void miniRegister(String nickName, String mobile, String password);
+
+    //后台 查询一天注册的人数
+    Integer countRegister(String day);
 }

@@ -45,15 +45,11 @@ public class EduVideoServiceImpl extends ServiceImpl<EduVideoMapper, EduVideo> i
             String videoSourceId = eduVideo.getVideoSourceId();
             if (!StringUtils.isEmpty(videoSourceId)){
                 videosId.add(videoSourceId);
-            }else {
-                throw new GuliException(20001,"videoSourceId为空");
             }
         }
         if (videosId.size() > 0){
             //根据多个视频ID删除多个视频
             vodClient.deleteBatchVideo(videosId);
-        }else {
-            throw new GuliException(20001,"videosId为空");
         }
 
         //删除小节

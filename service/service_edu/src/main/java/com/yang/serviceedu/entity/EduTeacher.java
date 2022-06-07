@@ -32,6 +32,10 @@ public class EduTeacher implements Serializable {
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
+    private String mobile;
+
+    private String password;
+
     @ApiModelProperty(value = "讲师姓名")
     private String name;
 
@@ -47,8 +51,13 @@ public class EduTeacher implements Serializable {
     @ApiModelProperty(value = "讲师头像")
     private String avatar;
 
+    private String qualification;
+
     @ApiModelProperty(value = "排序")
-    private Integer sort;
+    private String sort;
+
+    @ApiModelProperty(value = "审核是否通过 默认为0不通过;  1代表通过")
+    private Integer isPass;
 
     @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
     @TableLogic     //进行逻辑删除一定要加此注解！！

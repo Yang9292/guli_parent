@@ -97,9 +97,42 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         member.setPassword(MD5.encrypt(password));
         member.setIsDisabled(false);
         member.setNickname(nickname);
-        member.setAvatar("https://edu-9292.oss-cn-beijing.aliyuncs.com/2022/03/21/0339d9b36fab4271963210810b003e78file.png");
+        member.setAvatar("https://edu-9292.oss-cn-beijing.aliyuncs.com/2022/03/21/docter.jpg");
         //将数据保存到数据库
         baseMapper.insert(member);
+    }
+
+    @Override
+    public void miniRegister(String nickName, String mobile, String password) {
+        //判断参数传递的值是否为空
+        if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(nickName) || StringUtils.isEmpty(password)){
+            throw new GuliException(20001,"注册失败..");
+        }
+        //判断手机号是否存在
+        QueryWrapper<Member> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mobile",mobile);
+        Integer count = baseMapper.selectCount(queryWrapper);
+        //大于0则证明手机号存在，抛出异常
+        if (count > 0){
+            throw new GuliException(20001,"手机号已存在...");
+        }
+
+        //上述情况都没有，则证明可以注册
+        Member member = new Member();
+        member.setMobile(mobile);
+        member.setPassword(MD5.encrypt(password));
+        member.setIsDisabled(false);
+        member.setNickname(nickName);
+        member.setAvatar("https://edu-9292.oss-cn-beijing.aliyuncs.com/2022/03/21/docter.jpg");
+        //将数据保存到数据库
+        baseMapper.insert(member);
+
+    }
+
+    @Override
+    public Integer countRegister(String day) {
+        Integer count = baseMapper.countRegister(day);
+        return count;
     }
 
 

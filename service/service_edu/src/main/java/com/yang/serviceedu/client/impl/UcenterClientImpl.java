@@ -11,4 +11,9 @@ public class UcenterClientImpl implements UcenterClient {
     public MemberVo getUcenterMemberById(String id) {
         return null;
     }
+
+    @Override
+    public MemberVo miniUserInfo(String id) {
+        return null;
+    }
 }
